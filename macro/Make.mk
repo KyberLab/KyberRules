@@ -9,9 +9,12 @@
 # $(1) make command variables helper
 # return : make command variables helper
 #
-# Example:
+# Example 1:
 # origin : A=1 2 B=test C=foo bar baz
 # return : A="1 2" B=test C="foo bar baz"
+# Example 2:
+# origin : X=yyy --zzz uuu www-- g-gg zz_uu _yy yy_ A=1 2 B=test C=foo bar baz
+# return : X="yyy --zzz uuu www-- g-gg zz_uu _yy yy_" A="1 2" B=test C="foo bar baz"
 ifeq ($(origin make_cmd_vars_helper),undefined)
 define make_cmd_vars_helper
 $(shell echo '$1' | awk '{
@@ -62,7 +65,7 @@ endif
 # return : make command variables
 ifeq ($(origin make_cmd_vars),undefined)
 define make_cmd_vars
-$(call make_cmd_vars_helper,$(shell ps -o args= -p $$(ps -o ppid= -p $$$$) | sed 's/make//g' | sed 's/$(MAKECMDGOALS)//g' | sed 's/ -[^ ]*//g'))
+$(call make_cmd_vars_helper,$(shell ps -o args= -p $$(ps -o ppid= -p $$$$) | sed 's/make//g' | sed 's/$(MAKECMDGOALS)//g'))
 endef
 endif
 

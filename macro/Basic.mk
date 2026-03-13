@@ -40,12 +40,3 @@ $(strip $(shell echo -n `[ ! -f /.dockerenv ]` $$? | grep -v 1))
 endef
 endif
 
-
-# make_cmd_vars
-# return : make command variables
-ifeq ($(origin make_cmd_vars),undefined)
-define make_cmd_vars
-$(shell ps -o args= -p $$(ps -o ppid= -p $$$$) | sed 's/make//g' | sed 's/$(MAKECMDGOALS)//g' | sed 's/ -[^ ]*//g')
-endef
-endif
-

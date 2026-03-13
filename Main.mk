@@ -84,6 +84,8 @@ $(eval $(call rule_inc,$(RULES_ROOT_PATH)/macro/String.mk))
 
 $(eval $(call rule_inc,$(RULES_ROOT_PATH)/macro/File.mk))
 
+$(eval $(call rule_inc,$(RULES_ROOT_PATH)/macro/Make.mk))
+
 $(eval $(call rule_inc,$(RULES_ROOT_PATH)/macro/Version.mk))
 
 

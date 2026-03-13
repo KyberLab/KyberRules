@@ -66,3 +66,13 @@ define char_repeat
 $(shell echo $(foreach n,$(shell seq -s ' ' 1 $(2)),$(1)) | tr -d ' ' | tr 'X' ' ')
 endef
 endif
+
+
+# string_escape_double_quotes
+# $(1) string
+# return : escaped string
+# Support multiple levels of escaping
+define string_escape_double_quotes
+$(shell echo '$1' | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g')
+endef
+

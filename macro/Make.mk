@@ -65,7 +65,7 @@ endif
 # return : make command variables
 ifeq ($(origin make_cmd_vars),undefined)
 define make_cmd_vars
-$(foreach var,$(call make_cmd_vars_helper,$(shell ps -o args= -p $$(ps -o ppid= -p $$$$) | sed 's/make//g' | sed 's/$(MAKECMDGOALS)//g')),$(if $(shell echo $(var) | grep =),$(var),$(patsubst %,%=,$(var))))
+$(call string_kv_dedup,$(foreach var,$(call make_cmd_vars_helper,$(shell ps -o args= -p $$(ps -o ppid= -p $$$$) | sed 's/make//g' | sed 's/$(MAKECMDGOALS)//g')),$(if $(shell echo $(var) | grep =),$(var),$(patsubst %,%=,$(var)))))
 endef
 endif
 

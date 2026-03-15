@@ -76,3 +76,64 @@ define string_escape_double_quotes
 $(shell echo '$1' | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g')
 endef
 
+
+# string_kv_dedup
+# $(1) string containing key=value pairs (space-separated)
+# return : string with duplicate keys removed, keeping the last occurrence
+# Handles quoted values with spaces (e.g., KEY="value with spaces")
+define string_kv_dedup
+$(shell printf '%s' '$(1)' | awk -v RS='' -v ORS='' '
+{
+    n = split($$0, parts, " ");
+    in_quote = 0;
+    kv_count = 0;
+    current = "";
+    for (i = 1; i <= n; i++) {
+        if (current == "") {
+            current = parts[i];
+        } else {
+            current = current " " parts[i];
+        }
+        quote_count = 0;
+        for (j = 1; j <= length(parts[i]); j++) {
+            if (substr(parts[i], j, 1) == "\"") {
+                quote_count++;
+            }
+        }
+        if (quote_count % 2 == 1) {
+            in_quote = !in_quote;
+        }
+        if (!in_quote) {
+            kv_count++;
+            kv[kv_count] = current;
+            eq = index(current, "=");
+            if (eq > 0) {
+                key = substr(current, 1, eq - 1);
+            }
+            current = "";
+        }
+    }
+    if (current != "") {
+        kv_count++;
+        kv[kv_count] = current;
+    }
+    delete outputted;
+    result = "";
+    for (i = kv_count; i >= 1; i--) {
+        eq = index(kv[i], "=");
+        if (eq > 0) {
+            key = substr(kv[i], 1, eq - 1);
+            if (!(key in outputted)) {
+                if (result != "") {
+                    result = kv[i] " " result;
+                } else {
+                    result = kv[i];
+                }
+                outputted[key] = 1;
+            }
+        }
+    }
+    print result;
+}')
+endef
+

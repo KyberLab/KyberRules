@@ -29,7 +29,7 @@ $(shell echo '$1' | awk '{
                         printf "%s=%s ", var, value;
                     }
                 } else {
-                    printf "%s ", var;
+                    printf "%s= ", var;
                 }
             }
             split($$i, a, "=");
@@ -53,7 +53,7 @@ $(shell echo '$1' | awk '{
                 printf "%s=%s", var, value;
             }
         } else {
-            printf "%s", var;
+            printf "%s=", var;
         }
     }
 }')
@@ -65,7 +65,7 @@ endif
 # return : make command variables
 ifeq ($(origin make_cmd_vars),undefined)
 define make_cmd_vars
-$(call string_kv_dedup,$(foreach var,$(call make_cmd_vars_helper,$(shell ps -o args= -p $$(ps -o ppid= -p $$$$) | sed 's/make//g' | sed 's/$(MAKECMDGOALS)//g')),$(if $(shell echo $(var) | grep =),$(var),$(patsubst %,%=,$(var)))))
+$(call string_kv_dedup,$(call make_cmd_vars_helper,$(shell ps -o args= -p $$(ps -o ppid= -p $$$$) | sed 's/make//g' | sed 's/$(MAKECMDGOALS)//g')))
 endef
 endif
 

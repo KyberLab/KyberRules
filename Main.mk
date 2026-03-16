@@ -88,6 +88,8 @@ $(eval $(call rule_inc,$(RULES_ROOT_PATH)/macro/Make.mk))
 
 $(eval $(call rule_inc,$(RULES_ROOT_PATH)/macro/Version.mk))
 
+$(eval $(call rule_inc,$(RULES_ROOT_PATH)/macro/NBD.mk))
+
 
 
 ###############################################################################
